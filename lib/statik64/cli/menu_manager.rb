@@ -29,9 +29,11 @@ module Statik64
                 
                 run_menu(MENU_HOME_NAME)
                 while self.actions_pool.any?
+                    puts self.actions_pool.first
                     self.actions_pool.first.call
                     self.actions_pool.unshift
                 end
+                puts "osdfosdof"
                 nil
             end
 
@@ -191,7 +193,6 @@ module Statik64
                 if option_found.nil?
                     raise
                 end
-                puts option_found[:action]
                 add_action(option_found[:action])
             end
 
