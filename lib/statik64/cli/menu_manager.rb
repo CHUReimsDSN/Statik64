@@ -191,6 +191,7 @@ module Statik64
                 if option_found.nil?
                     raise
                 end
+                puts option_found[:action]
                 add_action(option_found[:action])
             end
 
