@@ -96,7 +96,7 @@ module Statik64
                         },
                         {
                             label: 'Quitter',
-                            action: -> () { leave }
+                            action: -> { leave }
                         }
                     ]
                 }
@@ -180,7 +180,7 @@ module Statik64
                     options: [get_go_back_option]
                 }
                 response = self.prompt.select(
-                    self.putser.put(" \n"),
+                    self.putser.get_string_bold(" \n"),
                     definition[:options],
                     show_help: :never
                 )
