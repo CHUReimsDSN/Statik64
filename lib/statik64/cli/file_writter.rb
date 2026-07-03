@@ -74,7 +74,7 @@ module Statik64
 				end
 				content = []
 				content << "export type #{base_type_name}#{enum_name.camelcase} = "
-				content << enum_found.keys.map(|k| "'#{k}'").join(' | ')
+				content << enum_found.keys.map {|k| "'#{k}'"}.join(' | ')
 				content << ';'
 				content_segments << content
 			end
