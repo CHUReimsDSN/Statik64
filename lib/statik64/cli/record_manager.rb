@@ -55,7 +55,7 @@ module Statik64
             end
 
             def get_routes
-                route_list.select do |route|
+                RecordManager.route_list.select do |route|
                     route[:model_route_key] == model_class.model_name.route_key
                 end
             end
