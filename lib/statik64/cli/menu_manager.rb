@@ -96,7 +96,7 @@ module Statik64
                         },
                         {
                             label: 'Quitter',
-                            action: -> { leave }
+                            action: -> () { leave }
                         }
                     ]
                 }
