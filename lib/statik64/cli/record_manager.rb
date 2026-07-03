@@ -2,7 +2,7 @@ module Statik64
     module CLI
         class RecordManager
 
-            attr_accessor: :model_class
+            attr_accessor :model_class
 
             OPTION_BASE_TYPE = :base_type.freeze
             OPTION_CONST_MODEL_NAME = :constant_model_name.freeze

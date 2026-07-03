@@ -6,7 +6,7 @@ module Statik64
     module CLI
         class Runner
 
-            attr_reader :menu_manager
+            attr_accessor :menu_manager
 
             def self.boot
                 self.new

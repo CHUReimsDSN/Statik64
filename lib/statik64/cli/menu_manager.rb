@@ -2,11 +2,11 @@ module Statik64
     module CLI
         class MenuManager
 
-            attr_reader :prompt,
-                        :putser,
-                        :current_menu_data,
-                        :actions_pool,
-                        :debug_mode
+            attr_accessor :prompt,
+                          :putser,
+                          :current_menu_data,
+                          :actions_pool,
+                          :debug_mode
 
             MENU_HOME_NAME = :home.freeze
             MENU_PICK_SINGLE_NAME = :generate_single.freeze

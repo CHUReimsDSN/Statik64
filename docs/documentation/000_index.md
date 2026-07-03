@@ -6,7 +6,7 @@ title: Installation
 ``` ruby
 # Gemfile
 group :development do
-    gem 'statik64', git: 'https://github.com/CHUReimsDSN/Statik64-Rails.git'
+  gem 'statik64', git: 'https://github.com/CHUReimsDSN/Statik64.git'
 end
 ```
 
@@ -19,7 +19,7 @@ bundle install
 ``` ruby
 # Gemfile
 group :development, :test do
-    gem 'statik64', git: 'https://github.com/CHUReimsDSN/Statik64-Rails.git', branch: 'nom_de_la_branche'
+  gem 'statik64', git: 'https://github.com/CHUReimsDSN/Statik64.git', branch: 'nom_de_la_branche'
 end
 ```
 

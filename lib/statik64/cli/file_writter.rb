@@ -2,7 +2,7 @@ module Statik64
 	module CLI
 		
 		class FileWritter
-			attr_accessor: :export_list,
+			attr_accessor :export_list,
 										 :content_segments,
 										 :model_class,
 										 :base_type_name,
