@@ -29,9 +29,8 @@ module Statik64
                 
                 run_menu(MENU_HOME_NAME)
                 while self.actions_pool.any?
-                    puts self.actions_pool.count
                     first_action = self.actions_pool.first
-                    self.actions_pool.unshift
+                    self.actions_pool.shift
                     first_action.call
                 end
                 nil
