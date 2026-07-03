@@ -19,7 +19,7 @@ module Statik64
                 options = []
                 options << {
                     label: 'Type typescript',
-                    value: OPTION_BASED_TYPE,
+                    value: OPTION_BASE_TYPE,
                 }
                 options << {
                     label: 'Constante nom du modèle',
