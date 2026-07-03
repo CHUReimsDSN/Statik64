@@ -9,7 +9,7 @@ module Statik64
                           :debug_mode
 
             MENU_HOME_NAME = :home.freeze
-            MENU_PICK_SINGLE_NAME = :generate_single.freeze
+            MENU_PICK_SINGLE_NAME = :pick_single.freeze
             MENU_GENERATE_SINGLE_NAME = :generate_single.freeze
             MENU_GENERATE_UTILS = :generate_utils.freeze
             MENU_ABOUT_NAME = :about.freeze
