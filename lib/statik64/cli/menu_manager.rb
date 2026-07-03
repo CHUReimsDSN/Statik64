@@ -41,7 +41,7 @@ module Statik64
                 self.actions_pool << action_proc
             end
 
-            def run_menu(name, context:)
+            def run_menu(name, context=nil)
                 self.current_menu_data[:previous_menu_name] = self.current_menu_data[:current_menu_name]
                 self.current_menu_data[:current_menu_name] = name
                 if context
