@@ -17,12 +17,12 @@ module Statik64
             end
 
             def clear_terminal
-                if Gem.win_platform?
-                    system("cls")
-                else
-                     system("clear")
-                end
-                print "\e[2J\e[H"
+                # if Gem.win_platform?
+                #     system("cls")
+                # else
+                #      system("clear")
+                # end
+                # print "\e[2J\e[H"
             end
 
             def get_string_highlight(message)
