@@ -14,6 +14,7 @@ module Statik64
 
             private
             def initialize
+                Rails.application.eager_load!
                 self.menu_manager = Statik64::CLI::MenuManager.new(self)
                 nil
             end

@@ -103,12 +103,10 @@ module Statik64
             end
             
             def self.get_model_list
-                Rails.application.eager_load!
-                ActiveRecord::Base.descendants
+                ActiveRecord::Base.descendants # TODO filter
             end
 
             def self.route_list
-                Rails.application.eager_load!
                 Rails.application.routes.routes.map do |route|
                     {
                         model_route_key: route.defaults[:controller],
