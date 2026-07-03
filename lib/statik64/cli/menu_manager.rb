@@ -180,10 +180,13 @@ module Statik64
                     options: [get_go_back_option]
                 }
                 response = self.prompt.select(
-                    self.putser.get_string_bold(" \n"),
-                    definition[:options],
+                    self.putser.get_string_bold("#{definition[:title]} \n"),
                     show_help: :never
-                )
+                ) do |menu|
+                    definition[:options].each do |option|
+                        menu.choice(option[:label])
+                    end
+                end
                 option_found = definition[:options].find {|option| option[:label] == response}
                 if option_found.nil?
                     raise

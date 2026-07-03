@@ -25,10 +25,6 @@ module Statik64
                 print "\e[2J\e[H"
             end
 
-            def put(message)
-                puts(message)
-            end
-
             def get_string_highlight(message)
                 self.pastel.decorate(message, HIGHLIGHT_COLOR, :bold)
             end
