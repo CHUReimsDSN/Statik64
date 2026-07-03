@@ -142,7 +142,7 @@ module Statik64
                 if option_found.nil?
                     raise
                 end
-                add_action(&option_found[:action])
+                add_action(option_found[:action])
             end
 
             def run_generate_single_menu
@@ -163,9 +163,9 @@ module Statik64
                     menu.choice(option[:label])
                 end
                 if response.any?
-                    add_action(&record_manager.write_api_file(response))
+                    add_action(record_manager.write_api_file(response))
                 else
-                    add_action(&get_go_back_option)
+                    add_action(get_go_back_option)
                 end
             end
 
@@ -188,7 +188,7 @@ module Statik64
                 if option_found.nil?
                     raise
                 end
-                add_action(&option_found[:action])
+                add_action(option_found[:action])
             end
 
         end
