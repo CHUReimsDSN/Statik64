@@ -140,7 +140,7 @@ module Statik64
 				content = []
 				content << "function #{function_name}() {"
 				content << "#{add_indentation}return ["
-				content << enum_found.keys.map(|k| "#{add_indentation(2)}'#{k}'").join(' , ')
+				content << enum_found.keys.map {|k| "#{add_indentation(2)}'#{k}'"}.join(' , ')
 				content << "#{add_indentation}];"
 				content << '}'
 				content_segments << content.join(FILE_API_BETWEEN_CONTENT_SEGMENT)
