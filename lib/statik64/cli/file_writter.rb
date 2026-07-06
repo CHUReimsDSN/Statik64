@@ -84,7 +84,7 @@ module Statik64
 				content << "export type #{self.base_type_name}#{enum_name.camelcase} = "
 				content << enum_found.keys.map {|k| "'#{k}'"}.join(' | ')
 				content << ';'
-				self.type_list << content
+				self.type_list << content.join('')
 			end
 			
 			def add_const_model_name_ts
@@ -144,7 +144,9 @@ module Statik64
 				content = []
 				content << "function #{function_name}() {"
 				content << "#{add_indentation}return ["
-				content << enum_found.keys.map {|k| "#{add_indentation(2)}'#{k}'"}.join(' , ')
+				enum_found.keys.each do |key|
+					content << "#{add_indentation(2)}'#{key}',"
+				end
 				content << "#{add_indentation}];"
 				content << '}'
 				self.function_list << content.join(FILE_API_BETWEEN_CONTENT_SEGMENT)
