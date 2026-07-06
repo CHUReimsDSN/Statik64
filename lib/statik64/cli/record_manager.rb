@@ -68,7 +68,7 @@ module Statik64
                 RecordManager.route_list.select do |route|
                     [
                         model_class.model_name.route_key,
-                        "#{model_class.model_name.route_key}s"
+                        model_class.model_name.route_key.singularize
                     ].include?(route[:model_route_key])
                 end
             end
