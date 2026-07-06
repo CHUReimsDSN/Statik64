@@ -154,12 +154,13 @@ module Statik64
                 record_manager = Statik64::CLI::RecordManager.new(model_class)
                 options = record_manager.get_menu_options
                 definition = {
-                    title: 'Que désirez-vous ?',
+                    title: "Que désirez-vous ? (#{model_class.to_s})",
                     options: options
                 }
                 response = self.prompt.multi_select(
                     self.putser.get_string_bold("#{definition[:title]} \n"),
-                    show_help: :never
+                    show_help: :never,
+                    echo: false
                 ) do |menu|
                     definition[:options].each do |option|
                         menu.choice(option[:label])
