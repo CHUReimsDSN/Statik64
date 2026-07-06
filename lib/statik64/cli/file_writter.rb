@@ -153,7 +153,7 @@ module Statik64
 				function_name = route[:action_name].camelize(:lower)
 				function_args = {}
 				route[:path_segments].each do |segment|
-					if segment.empty? || segment == 'api' || segment.include?(':')
+					if segment.exclude?(':')
 						next
 					end
 					function_args[segment.camelize(:lower)] = "#{segment.include?('id') ? 'number' : 'string'}"

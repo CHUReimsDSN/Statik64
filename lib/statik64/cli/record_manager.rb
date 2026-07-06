@@ -121,7 +121,7 @@ module Statik64
                 Rails.application.routes.routes.map do |route|
                     {
                         model_route_key: route.defaults[:controller],
-                        path_segments: route.path.spec.to_s.gsub('(.:format)', '').split('/'),
+                        path_segments: route.path.spec.to_s.gsub('(.:format)', '').split('/').filter {|segment| segment != 'api' && !segment.empty?},
                         method_http: route.verb,
                         action_name: route.defaults[:action],
                         composite_key: "#{route.defaults[:controller]}##{route.defaults[:action]}"
