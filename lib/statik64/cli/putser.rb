@@ -49,7 +49,7 @@ module Statik64
                 puts ("""
 #{self.get_string_highlight("Description")} : Statik64 est un CLI permettant de générer des APIs TypeScript
               en se basant sur les modèle définis dans ActiveRecord
-#{self.get_string_highlight("Version")} :        #{Statik64::VERSION}
+#{self.get_string_highlight("Version")} :     #{Statik64::VERSION}
                 """)
             end
 

@@ -67,7 +67,7 @@ module Statik64
             def write_api_file(option_values)
                 writter = Statik64::CLI::FileWritter.new(self.model_class)
                 option_values.each do |value|
-                    case value
+                    case value.to_sym
                     when OPTION_BASE_TYPE
                         writter.add_base_type_ts
                         next
