@@ -158,6 +158,7 @@ module Statik64
 					end
 					function_args[segment.camelize(:lower)] = "#{segment.include?('id') ? 'number' : 'string'}"
 				end
+				puts route[:method_http]
 				api_method = {
 					'GET': 'get',
 					'POST': 'post',
@@ -166,7 +167,10 @@ module Statik64
 					'DELETE': 'delete'
 				}[route[:method_http]] || 'get'
 				url_segments = ['${url}']
-				route[:path_segments].each do |segment|
+				route[:path_segments].each_with_index do |segment, segment_index|
+					if segment_index == 0
+						next
+					end
 					url_segments << "#{segment.include?(':') ? "${#{segment.camelize(:lower)}}" : segment}"
 				end
 				if ['get', 'delete'].exclude?(api_method)
