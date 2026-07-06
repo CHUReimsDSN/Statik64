@@ -36,6 +36,7 @@ module Statik64
                     when USE_CABLE_OPTION
                         filenames << self.write_use_cable
                         next
+                    end
                 end
                 filenames
             end
