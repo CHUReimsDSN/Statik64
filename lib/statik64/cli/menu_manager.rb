@@ -48,7 +48,9 @@ module Statik64
                 if context
                     self.current_menu_data[:context] = context
                 end
-                self.putser.clear_terminal
+                if !self.debug_mode
+                    self.putser.clear_terminal
+                end
                 self.putser.puts_logo
                 case name
                 when MENU_HOME_NAME
