@@ -48,6 +48,7 @@ module Statik64
                     end
                 end
                 routes = get_routes
+                puts model_class.model_name.route_key # TODO delete
                 if routes.any?
                     routes.each do |route|
                         options << {
@@ -68,7 +69,7 @@ module Statik64
                     [
                         model_class.model_name.route_key,
                         "#{model_class.model_name.route_key}s"
-                    ].include?route[:model_route_key]
+                    ].include?(route[:model_route_key])
                 end
             end
 
@@ -77,6 +78,7 @@ module Statik64
             end
 
             def write_api_file(option_values)
+                puts option_values
                 writter = Statik64::CLI::FileWritter.new(self.model_class)
                 option_values.each do |value|
                     case value
@@ -117,7 +119,7 @@ module Statik64
             
             def self.get_model_list
                 ActiveRecord::Base.descendants.filter do |model|
-                    [MODEL_TO_EXCLUDE].exclude?(model.to_s) && !model.abstract_class?
+                    MODEL_TO_EXCLUDE.exclude?(model.to_s) && !model.abstract_class?
                 end
             end
 
