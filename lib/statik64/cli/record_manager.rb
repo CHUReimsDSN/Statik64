@@ -39,11 +39,11 @@ module Statik64
                     model_class.defined_enums.keys.each do |enum_name|
                         options << {
                             label: "Type pour enum '#{enum_name}'",
-                            value: "#{OPTION_TYPE_ENUM_SEGMENT}#{enum_name}".to_sym
+                            value: "#{OPTION_TYPE_ENUM_SEGMENT}#{enum_name}"
                         }
                         options << {
                             label: "Fonction affichage pour enum '#{enum_name}'",
-                            value: "#{OPTION_FUNCTION_ENUM_SEGMENT}#{enum_name}".to_sym
+                            value: "#{OPTION_FUNCTION_ENUM_SEGMENT}#{enum_name}"
                         }
                     end
                 end
