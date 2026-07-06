@@ -148,7 +148,7 @@ module Statik64
 			end
 
 			def add_function_rest(route)
-				function_name = "get#{route[:action_camelized_name]}"
+				function_name = route[:action_name].camelize
 				content = []
 				content << "async function #{function_name}(): Promise {"
 				content << "#{add_indentation}return"

@@ -42,8 +42,8 @@ module Statik64
                 if routes.any?
                     routes.each do |route|
                         options << {
-                            label: "Fonction REST #{route[:action_camelized_name]}",
-                            value: "#{OPTION_FUNCTION_REST_SEGMENT.to_s}#{route[:action_camelized_name]}"
+                            label: "Fonction REST #{route[:composite_key]}",
+                            value: "#{OPTION_FUNCTION_REST_SEGMENT.to_s}#{route[:composite_key]}"
                         }
                     end
                 end
@@ -90,7 +90,7 @@ module Statik64
                     end
                     if value.include?(OPTION_FUNCTION_REST_SEGMENT)
                         route = get_routes.find do |route|
-                            route[:action_camelized_name] == value.gsub(OPTION_FUNCTION_REST_SEGMENT)
+                            route[:composite_key] == value.gsub(OPTION_FUNCTION_REST_SEGMENT)
                         end
                         if route.nil?
                             raise
@@ -112,8 +112,11 @@ module Statik64
                         model_route_key: route.defaults[:controller],
                         path_segments: route.path.spec.to_s.gsub('(.:format)', '').split('/'),
                         method_http: route.verb,
-                        action_camelized_name: route.defaults[:action].camelize(:lower),
+                        action_name: route.defaults[:action],
+                        composite_key: "#{route.defaults[:controller]}##{route.defaults[:action]}"
                     }
+                end.fiilter do |route|
+                    route[:action_name] != nil
                 end
             end
         end
