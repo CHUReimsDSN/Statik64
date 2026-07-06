@@ -216,11 +216,11 @@ module Statik64
 			end
 
 			def add_statik64_annotation
-				<<TEXT
-/**
- * @generated_by_statik64
- */
-				TEXT
+# 				~<<TEXT
+# /**
+#  * @generated_by_statik64
+#  */
+# 				TEXT
 			end
 
 			def ensure_axios_is_imported
