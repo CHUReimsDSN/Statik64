@@ -87,6 +87,13 @@ module Statik64
                 }
             end
 
+            def get_go_home_option
+                {
+                    label: 'Retour',
+                    action: -> { run_menu(MENU_HOME_NAME) }
+                }
+            end
+
             def run_home_menu
                 definition = {
                     title: 'Menu principal',
@@ -187,7 +194,7 @@ module Statik64
             def run_done_menu
                 definition = {
                     title: self.current_menu_data[:context][:message],
-                    options: [get_go_back_option]
+                    options: [get_go_home_option]
                 }
                 response = self.prompt.select(
                     self.putser.get_string_bold("#{definition[:title]} \n"),

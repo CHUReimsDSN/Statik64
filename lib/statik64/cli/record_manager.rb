@@ -11,7 +11,14 @@ module Statik64
             OPTION_FUNCTION_ENUM_SEGMENT = 'function_display_for_enum'.freeze
             OPTION_FUNCTION_REST_SEGMENT = 'function_rest_'.freeze
 
-            MODEL_TO_EXCLUDE = [].freeze
+            MODEL_TO_EXCLUDE = [
+                'ActionText::RichText',
+                'ActionText::EncryptedRichText',
+                'ActiveStorage::VariantRecord',
+                'ActiveStorage::Blob',
+                'ActiveStorage::Attachment',
+                'ActionMailbox::InboundEmail'
+            ].freeze
 
             def initialize(model_class)
                 self.model_class = model_class
@@ -111,6 +118,7 @@ module Statik64
             def self.get_model_list
                 ActiveRecord::Base.descendants.filter do |model|
                     [MODEL_TO_EXCLUDE].exclude?(model.to_s)
+                    !model.abstract_class?
                 end
             end
 
