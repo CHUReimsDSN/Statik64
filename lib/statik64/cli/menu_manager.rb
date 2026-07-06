@@ -169,7 +169,8 @@ module Statik64
                     end
                 end
                 if response.any?
-                    add_action(record_manager.write_api_file(response))
+                    record_manager.write_api_file(response)
+                    # TODO output display avec juste un OK !
                 end
                 add_action(get_go_back_option)
             end
