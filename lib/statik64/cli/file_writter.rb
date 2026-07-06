@@ -122,7 +122,7 @@ module Statik64
 					}
 				end
 				content = []
-				content << "function #{function_name}(): Partial<#{base_type}> {"
+				content << "function #{function_name}(): Partial<#{base_type_name}> {"
 				values_by_columns.each do |value|
 					content << "#{add_indentation}#{value[:name]}: #{value[:value]},"
 				end

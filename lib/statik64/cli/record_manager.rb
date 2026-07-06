@@ -78,9 +78,6 @@ module Statik64
             end
 
             def write_api_file(option_values)
-                puts "!!!"
-                puts option_values
-                puts "!!!"
                 writter = Statik64::CLI::FileWritter.new(self.model_class)
                 option_values.each do |value|
                     case value
