@@ -91,7 +91,7 @@ module Statik64
 			
 			def add_routes_rest_const_ts(route)
 				const_name = 'url'.freeze
-				first_segment = path.spec.to_s.gsub('(.:format)', '').split('/').first
+				first_segment = route.path.spec.to_s.gsub('(.:format)', '').split('/').first
 				url_value = ''
 				if first_segment == model_class.model_name.route_key
 					url_value = "#{model_class.model_name.route_key}"
