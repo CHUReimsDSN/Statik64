@@ -115,7 +115,7 @@ module Statik64
                         action_name: route.defaults[:action],
                         composite_key: "#{route.defaults[:controller]}##{route.defaults[:action]}"
                     }
-                end.fiilter do |route|
+                end.filter do |route|
                     route[:action_name] != nil
                 end
             end
