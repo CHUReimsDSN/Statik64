@@ -153,6 +153,9 @@ module Statik64
 				function_name = route[:action_name].camelize(:lower)
 				function_args = {}
 				route[:path_segments].each do |segment|
+					if segment.empty? || segment == 'api' || segment.include?(':')
+						next
+					end
 					function_args[segment.camelize(:lower)] = "#{segment.include?('id') ? 'number' : 'string'}"
 				end
 				api_method = {
@@ -175,7 +178,7 @@ module Statik64
 				payload_arg_string = function_args["payload"].nil? ? '' : ", { payload }"
 				config_arg_string = ''
 				content = []
-				content << "async function #{function_name}(#{function_args}) {"
+				content << "async function #{function_name}(#{function_args_string}) {"
 				content << "#{add_indentation}return (await api.#{api_method}(`#{url_segments.join('/')}`#{payload_arg_string}#{config_arg_string})).data;"
 				content << '}'
 				content_segments << content.join(FILE_API_BETWEEN_CONTENT_SEGMENT)
@@ -232,7 +235,7 @@ module Statik64
 				content = ''
 				if import_list.any?
 					content << import_list.join(FILE_API_BETWEEN_CONTENT_SEGMENT)
-					content << FILE_API_BETWEEN_CONTENT_SEGMENT
+					content << "#{FILE_API_BETWEEN_CONTENT_SEGMENT}#{FILE_API_BETWEEN_CONTENT_SEGMENT}"
 				end
 				if export_list.any?
 					add_const_export_ts
