@@ -249,6 +249,7 @@ module Statik64
 				if self.export_list.any?
 					content << get_const_export_ts
 				end
+				content << ''
 				# get_filename_ts
 				File.write('debug.ts', content.join("#{FILE_API_BETWEEN_CONTENT_SEGMENT}#{FILE_API_BETWEEN_CONTENT_SEGMENT}"))
 			end

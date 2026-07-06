@@ -36,7 +36,7 @@ module Statik64
                 }
                 enums = model_class.defined_enums
                 if enums.any?
-                    model_class.defined_enums.keys do |enum_name|
+                    model_class.defined_enums.keys.each do |enum_name|
                         options << {
                             label: "Type pour enum '#{enum_name}'",
                             value: "#{OPTION_TYPE_ENUM_SEGMENT}#{enum_name}".to_sym
