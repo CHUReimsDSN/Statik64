@@ -48,7 +48,6 @@ module Statik64
                     end
                 end
                 routes = get_routes
-                puts model_class.model_name.route_key # TODO delete
                 if routes.any?
                     routes.each do |route|
                         options << {
@@ -68,7 +67,7 @@ module Statik64
                 RecordManager.route_list.select do |route|
                     [
                         model_class.model_name.route_key,
-                        model_class.model_name.route_key.singularize
+                        model_class.model_name.route_key.singularize,
                     ].include?(route[:model_route_key])
                 end
             end
@@ -102,6 +101,11 @@ module Statik64
                         next
                     end
                     if value.include?(OPTION_FUNCTION_REST_SEGMENT)
+                        puts "!!!"
+                        puts value.gsub(OPTION_FUNCTION_REST_SEGMENT)
+                        puts value
+                        puts get_routes.pluck(:composite_key)
+                        puts "!!!"
                         route = get_routes.find do |route|
                             route[:composite_key] == value.gsub(OPTION_FUNCTION_REST_SEGMENT)
                         end
