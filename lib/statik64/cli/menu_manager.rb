@@ -161,7 +161,9 @@ module Statik64
                     self.putser.get_string_bold("#{definition[:title]} \n"),
                     show_help: :never
                 ) do |menu|
-                    menu.choice(option[:label])
+                    definition[:options].each do |option|
+                        menu.choice(option[:label])
+                    end
                 end
                 if response.any?
                     add_action(record_manager.write_api_file(response))
