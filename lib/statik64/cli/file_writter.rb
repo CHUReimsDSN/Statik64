@@ -183,7 +183,7 @@ module Statik64
 					add_const_export_ts
 				end
 				content = content_segments.join("#{FILE_API_BETWEEN_CONTENT_SEGMENT}#{FILE_API_BETWEEN_CONTENT_SEGMENT}")
-				File.write(content, Path.join(FILE_API_PATH, get_filename_ts))
+				File.write(content, File.join(FILE_API_PATH, get_filename_ts))
 			end
 			
 		end
