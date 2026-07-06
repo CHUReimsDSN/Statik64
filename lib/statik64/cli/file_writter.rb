@@ -239,19 +239,18 @@ module Statik64
 			end
 
 			def write_file
-				content = ''
+				content = []
 				if import_list.any?
 					content << import_list.join(FILE_API_BETWEEN_CONTENT_SEGMENT)
-					content << "#{FILE_API_BETWEEN_CONTENT_SEGMENT}#{FILE_API_BETWEEN_CONTENT_SEGMENT}"
 				end
-				content << self.type_list.join("#{FILE_API_BETWEEN_CONTENT_SEGMENT}#{FILE_API_BETWEEN_CONTENT_SEGMENT}")
-				content << self.const_list.join("#{FILE_API_BETWEEN_CONTENT_SEGMENT}#{FILE_API_BETWEEN_CONTENT_SEGMENT}")
-				content << self.function_list.join("#{FILE_API_BETWEEN_CONTENT_SEGMENT}#{FILE_API_BETWEEN_CONTENT_SEGMENT}")
+				content << self.type_list.join(FILE_API_BETWEEN_CONTENT_SEGMENT)
+				content << self.const_list.join(FILE_API_BETWEEN_CONTENT_SEGMENT)
+				content << self.function_list.join(FILE_API_BETWEEN_CONTENT_SEGMENT)
 				if self.export_list.any?
 					content << get_const_export_ts
 				end
 				# get_filename_ts
-				File.write('debug.ts', content)
+				File.write('debug.ts', content.join("#{FILE_API_BETWEEN_CONTENT_SEGMENT}#{FILE_API_BETWEEN_CONTENT_SEGMENT}"))
 			end
 			
 		end
