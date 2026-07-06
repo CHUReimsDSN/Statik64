@@ -102,12 +102,12 @@ module Statik64
                     end
                     if value.include?(OPTION_FUNCTION_REST_SEGMENT)
                         puts "!!!"
-                        puts value.gsub(OPTION_FUNCTION_REST_SEGMENT)
+                        puts value.sub(OPTION_FUNCTION_REST_SEGMENT)
                         puts value
                         puts get_routes.pluck(:composite_key)
                         puts "!!!"
                         route = get_routes.find do |route|
-                            route[:composite_key] == value.gsub(OPTION_FUNCTION_REST_SEGMENT)
+                            route[:composite_key] == value.sub(OPTION_FUNCTION_REST_SEGMENT)
                         end
                         if route.nil?
                             raise
