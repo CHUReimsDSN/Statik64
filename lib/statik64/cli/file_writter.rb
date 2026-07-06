@@ -89,9 +89,16 @@ module Statik64
 				export_list << const_name
 			end
 			
-			def add_routes_rest_const_ts
+			def add_routes_rest_const_ts(route)
 				const_name = 'url'.freeze
-				content_segments << "const #{const_name} = '#{model_class.model_name.route_key}';"
+				first_segment = path.spec.to_s.gsub('(.:format)', '').split('/').first
+				url_value = ''
+				if first_segment == model_class.model_name.route_key
+					url_value = "#{model_class.model_name.route_key}"
+				else
+					url_value = "#{model_class.model_name.singular_route_key}"
+				end
+				content_segments << "const #{const_name} = '#{url_value}';"
 				export_list << const_name
 			end
 
@@ -155,7 +162,7 @@ module Statik64
 
 			def add_function_rest(route)
 				ensure_axios_is_imported
-				ensure_const_route_is_defined
+				ensure_const_route_is_defined(route)
 				function_name = route[:action_name].camelize(:lower)
 				function_args = {}
 				route[:path_segments].each do |segment|
@@ -209,7 +216,11 @@ module Statik64
 			end
 
 			def add_statik64_annotation
-				'@generated_by_statik64'
+				<<TEXT
+/**
+ * @generated_by_statik64
+ */
+				TEXT
 			end
 
 			def ensure_axios_is_imported
@@ -219,9 +230,9 @@ module Statik64
 				nil
 			end
 
-			def ensure_const_route_is_defined
+			def ensure_const_route_is_defined(route)
 				if !self.url_const_is_defined
-					add_routes_rest_const_ts
+					add_routes_rest_const_ts(route)
 					self.url_const_is_defined = true
 				end
 			end

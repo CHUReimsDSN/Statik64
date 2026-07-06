@@ -65,7 +65,10 @@ module Statik64
 
             def get_routes
                 RecordManager.route_list.select do |route|
-                    model_class.model_name.route_key == (route[:model_route_key])
+                    [
+                        model_class.model_name.route_key,
+                        model_class.model_name.route_key.singularize,
+                    ].include?(route[:model_route_key])
                 end
             end
 
