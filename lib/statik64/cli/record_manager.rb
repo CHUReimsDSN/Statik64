@@ -91,23 +91,18 @@ module Statik64
                         next
                     end
                     if value.include?(OPTION_TYPE_ENUM_SEGMENT)
-                        enum_name = value.gsub(OPTION_TYPE_ENUM_SEGMENT)
+                        enum_name = value.gsub(OPTION_TYPE_ENUM_SEGMENT, '')
                         writter.add_enum_type_ts(enum_name)
                         next
                     end
                     if value.include?(OPTION_FUNCTION_ENUM_SEGMENT)
-                        enum_name = value.gsub(OPTION_FUNCTION_ENUM_SEGMENT)
+                        enum_name = value.gsub(OPTION_FUNCTION_ENUM_SEGMENT, '')
                         writter.add_function_enum(enum_name)
                         next
                     end
                     if value.include?(OPTION_FUNCTION_REST_SEGMENT)
-                        puts "!!!"
-                        puts value.sub(OPTION_FUNCTION_REST_SEGMENT)
-                        puts value
-                        puts get_routes.pluck(:composite_key)
-                        puts "!!!"
                         route = get_routes.find do |route|
-                            route[:composite_key] == value.sub(OPTION_FUNCTION_REST_SEGMENT)
+                            route[:composite_key] == value.gsub(OPTION_FUNCTION_REST_SEGMENT, '')
                         end
                         if route.nil?
                             raise
