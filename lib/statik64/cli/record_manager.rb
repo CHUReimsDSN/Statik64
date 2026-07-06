@@ -65,22 +65,13 @@ module Statik64
 
             def get_routes
                 RecordManager.route_list.select do |route|
-                    [
-                        model_class.model_name.route_key,
-                        model_class.model_name.route_key.singularize,
-                    ].include?(route[:model_route_key])
+                    model_class.model_name.route_key == (route[:model_route_key])
                 end
-            end
-
-            def get_enums
-                model_class.defined_enums
             end
 
             def write_api_file(option_values)
                 writter = Statik64::CLI::FileWritter.new(self.model_class)
                 option_values.each do |value|
-                    puts "!!"
-                    puts value
                     case value
                     when OPTION_BASE_TYPE
                         writter.add_base_type_ts

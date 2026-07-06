@@ -5,7 +5,9 @@ module Statik64
 			attr_accessor :export_list,
 										 :content_segments,
 										 :model_class,
-										 :base_type_name
+										 :base_type_name,
+										 :import_list,
+										 :url_const_is_defined
 			
 			FILE_API_SEPARATOR = '-'.freeze
 			FILE_API_EXTENSION = '.api.ts'.freeze
@@ -14,12 +16,15 @@ module Statik64
 			FILE_API_PATH = Rails.root # TODO
 			TYPE_PREFIX = 'T'.freeze
 			API_CONST_SUFFIX = 'Api'.freeze
+			AXIOS_IMPORT = "import { api } from 'boot/axios';"
 			
 			def initialize(model_class)
 				self.export_list = []
 				self.content_segments = []
 				self.model_class = model_class
 				self.base_type_name = ''
+				self.import_list = []
+				self.url_const_is_defined = false
 			end
 			
 			def get_filename_ts
@@ -122,9 +127,11 @@ module Statik64
 				end
 				content = []
 				content << "function #{function_name}(): Partial<#{self.base_type_name}> {"
+				content << "#{add_indentation}return {"
 				values_by_columns.each do |value|
-					content << "#{add_indentation}#{value[:name]}: #{value[:value]},"
+					content << "#{add_indentation(2)}#{value[:name]}: #{value[:value]},"
 				end
+				content << "#{add_indentation}}"
 				content << "}"
 				content_segments << content.join(FILE_API_BETWEEN_CONTENT_SEGMENT)
 				export_list << function_name
@@ -147,11 +154,35 @@ module Statik64
 			end
 
 			def add_function_rest(route)
+				ensure_axios_is_imported
+				ensure_const_route_is_defined
 				function_name = route[:action_name].camelize(:lower)
+				function_args = {}
+				route[:path_segments].each do |segment|
+					function_args[segment.camelize(:lower)] = "#{segment.include?('id') ? 'number' : 'string'}"
+				end
+				api_method = {
+					'GET': 'get',
+					'POST': 'post',
+					'PUT': 'put',
+					'PATCH': 'patch',
+					'DELETE': 'delete'
+				}[route[:method_http]] || 'get'
+				url_segments = ['${url}']
+				route[:path_segments].each do |segment|
+					url_segments << "#{segment.include?(':') ? "${#{segment.camelize(:lower)}}" : segment}"
+				end
+				if ['get', 'delete'].exclude?(api_method)
+					function_args["payload"] = "unknown"
+				end
+				function_args_string = function_args.entries.map do |entry|
+					"#{entry[0]}: #{entry[1]}"
+				end.join(', ')
+				payload_arg_string = function_args["payload"].nil ? '' : ", { payload }"
+				config_arg_string = ''
 				content = []
-				content << "async function #{function_name}() {"
-				content << "#{add_indentation}return"
-				# TODO
+				content << "async function #{function_name}(#{function_args}) {"
+				content << "#{add_indentation}return (await api.#{api_method}(`#{url_segment.join('/')}`#{payload_arg_string}#{config_arg_string})).data;"
 				content << '}'
 				content_segments << content.join(FILE_API_BETWEEN_CONTENT_SEGMENT)
 				export_list << function_name
@@ -181,11 +212,30 @@ module Statik64
 				'@generated_by_statik64'
 			end
 
+			def ensure_axios_is_imported
+				if self.import_list.exclude?(AXIOS_IMPORT)
+					self.import_list << AXIOS_IMPORT
+				end
+				nil
+			end
+
+			def ensure_const_route_is_defined
+				if !self.url_const_is_defined
+					add_routes_rest_const_ts
+					self.url_const_is_defined = true
+				end
+			end
+
 			def write_file
+				content = ''
+				if import_list.any?
+					content << import_list.join(FILE_API_BETWEEN_CONTENT_SEGMENT)
+					content << FILE_API_BETWEEN_CONTENT_SEGMENT
+				end
 				if export_list.any?
 					add_const_export_ts
 				end
-				content = content_segments.join("#{FILE_API_BETWEEN_CONTENT_SEGMENT}#{FILE_API_BETWEEN_CONTENT_SEGMENT}")
+				content << content_segments.join("#{FILE_API_BETWEEN_CONTENT_SEGMENT}#{FILE_API_BETWEEN_CONTENT_SEGMENT}")
 				# get_filename_ts
 				File.write('debug.ts', content)
 			end
