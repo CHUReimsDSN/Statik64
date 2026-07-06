@@ -176,7 +176,7 @@ module Statik64
 				config_arg_string = ''
 				content = []
 				content << "async function #{function_name}(#{function_args}) {"
-				content << "#{add_indentation}return (await api.#{api_method}(`#{url_segment.join('/')}`#{payload_arg_string}#{config_arg_string})).data;"
+				content << "#{add_indentation}return (await api.#{api_method}(`#{url_segments.join('/')}`#{payload_arg_string}#{config_arg_string})).data;"
 				content << '}'
 				content_segments << content.join(FILE_API_BETWEEN_CONTENT_SEGMENT)
 				export_list << function_name
