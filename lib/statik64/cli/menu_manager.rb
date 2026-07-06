@@ -11,7 +11,8 @@ module Statik64
             MENU_HOME_NAME = :home.freeze
             MENU_PICK_SINGLE_NAME = :pick_single.freeze
             MENU_GENERATE_SINGLE_NAME = :generate_single.freeze
-            MENU_GENERATE_UTILS = :generate_utils.freeze
+            MENU_DONE_NAME = :done.freeze
+            MENU_GENERATE_UTILS_NAME = :generate_utils.freeze
             MENU_ABOUT_NAME = :about.freeze
 
             def initialize(runner)
@@ -23,7 +24,8 @@ module Statik64
                     current_menu_name: MENU_HOME_NAME,
                     previous_menu_name: nil,
                     context: {
-                        selected_model: nil
+                        selected_model: nil,
+                        message: nil
                     }
                 }
                 
@@ -48,7 +50,9 @@ module Statik64
                 if context
                     self.current_menu_data[:context] = context
                 end
-                if !self.debug_mode
+                if self.debug_mode
+                    self.putser.puts_debug_mode
+                else
                     self.putser.clear_terminal
                 end
                 self.putser.puts_logo
@@ -59,8 +63,10 @@ module Statik64
                     run_pick_single_menu
                 when MENU_GENERATE_SINGLE_NAME
                     run_generate_single_menu
-                when MENU_GENERATE_UTILS
+                when MENU_GENERATE_UTILS_NAME
                     run_generate_utils_menu
+                when MENU_DONE_NAME
+                    run_done_menu
                 when MENU_ABOUT_NAME
                     run_about_menu
                 else
@@ -91,7 +97,7 @@ module Statik64
                         },
                         {
                             label: "Génération d'utilitaires",
-                            action: -> { run_menu(MENU_GENERATE_UTILS) }
+                            action: -> { run_menu(MENU_GENERATE_UTILS_NAME) }
                         },
                         {
                             label: 'A propos',
@@ -169,10 +175,33 @@ module Statik64
                     end
                 end
                 if response.any?
-                    record_manager.write_api_file(response)
-                    # TODO output display avec juste un OK !
+                    filename = record_manager.write_api_file(response)
+                    add_action(-> { run_menu(MENU_DONE_NAME, {
+                        message: "Terminé ! Fichier généré #{filename}"
+                    }) })
+                else
+                    add_action(get_go_back_option[:action])
                 end
-                add_action(get_go_back_option)
+            end
+
+            def run_done_menu
+                definition = {
+                    title: self.current_menu_data[:context][:message],
+                    options: [get_go_back_option]
+                }
+                response = self.prompt.select(
+                    self.putser.get_string_bold("#{definition[:title]} \n"),
+                    show_help: :never
+                ) do |menu|
+                    definition[:options].each do |option|
+                        menu.choice(option[:label])
+                    end
+                end
+                option_found = definition[:options].find {|option| option[:label] == response}
+                if option_found.nil?
+                    raise
+                end
+                add_action(option_found[:action])
             end
 
             def run_generate_utils_menu

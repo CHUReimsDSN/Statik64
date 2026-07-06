@@ -100,6 +100,7 @@ module Statik64
                     end
                 end
                 writter.write_file
+                writter.get_filename_ts
             end
             
             def self.get_model_list
