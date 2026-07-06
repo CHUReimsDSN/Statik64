@@ -3,11 +3,13 @@ module Statik64
 		
 		class FileWritter
 			attr_accessor :export_list,
-										 :content_segments,
 										 :model_class,
 										 :base_type_name,
 										 :import_list,
-										 :url_list
+										 :url_list,
+										 :const_list,
+										 :function_list,
+										 :type_list
 			
 			FILE_API_SEPARATOR = '-'.freeze
 			FILE_API_EXTENSION = '.api.ts'.freeze
@@ -20,11 +22,13 @@ module Statik64
 			
 			def initialize(model_class)
 				self.export_list = []
-				self.content_segments = []
 				self.model_class = model_class
 				self.base_type_name = ''
 				self.import_list = []
 				self.url_list = []
+				self.const_list = []
+				self.function_list = []
+				self.type_list = []
 			end
 			
 			def get_filename_ts
@@ -68,7 +72,7 @@ module Statik64
 					content << "#{add_indentation}#{column[:name]}: #{column[:types]};"
 				end
 				content << '}'
-				content_segments << content.join(FILE_API_BETWEEN_CONTENT_SEGMENT)
+				self.type_list << content.join(FILE_API_BETWEEN_CONTENT_SEGMENT)
 			end
 			
 			def add_enum_type_ts(enum_name)
@@ -80,13 +84,13 @@ module Statik64
 				content << "export type #{self.base_type_name}#{enum_name.camelcase} = "
 				content << enum_found.keys.map {|k| "'#{k}'"}.join(' | ')
 				content << ';'
-				content_segments << content
+				self.type_list << content
 			end
 			
 			def add_const_model_name_ts
 				const_name = 'modelName'.freeze
-				content_segments << "const #{const_name} = '#{model_class.model_name.name}';"
-				export_list << const_name
+				self.const_list << "const #{const_name} = '#{self.model_class.model_name.name}';"
+				self.export_list << const_name
 			end
 			
 			def add_function_get_default
@@ -127,8 +131,8 @@ module Statik64
 				end
 				content << "#{add_indentation}}"
 				content << "}"
-				content_segments << content.join(FILE_API_BETWEEN_CONTENT_SEGMENT)
-				export_list << function_name
+				self.function_list << content.join(FILE_API_BETWEEN_CONTENT_SEGMENT)
+				self.export_list << function_name
 			end
 
 			def add_function_enum(enum_name)
@@ -143,8 +147,8 @@ module Statik64
 				content << enum_found.keys.map {|k| "#{add_indentation(2)}'#{k}'"}.join(' , ')
 				content << "#{add_indentation}];"
 				content << '}'
-				content_segments << content.join(FILE_API_BETWEEN_CONTENT_SEGMENT)
-				export_list << function_name
+				self.function_list << content.join(FILE_API_BETWEEN_CONTENT_SEGMENT)
+				self.export_list << function_name
 			end
 
 			def add_function_rest(route)
@@ -184,18 +188,18 @@ module Statik64
 				content << "async function #{function_name}(#{function_args_string}) {"
 				content << "#{add_indentation}return (await api.#{api_method}(`#{url_segments.join('/')}`#{payload_arg_string}#{config_arg_string})).data;"
 				content << '}'
-				content_segments << content.join(FILE_API_BETWEEN_CONTENT_SEGMENT)
-				export_list << function_name
+				self.function_list << content.join(FILE_API_BETWEEN_CONTENT_SEGMENT)
+				self.export_list << function_name
 			end
 			
-			def add_const_export_ts
+			def get_const_export_ts
 				content = []
 				content << "export const #{model_class.model_name.name.camelcase}#{API_CONST_SUFFIX} = {"
 				export_list.each do |export_segment|
 					content << "#{add_indentation}#{export_segment},"
 				end
 				content << "}"
-				content_segments << content.join(FILE_API_BETWEEN_CONTENT_SEGMENT)
+				content.join(FILE_API_BETWEEN_CONTENT_SEGMENT)
 			end
 			
 			def add_indentation(occurence = 1)
@@ -228,7 +232,7 @@ module Statik64
 				if self.url_list.exclude?(first_segment)
 					self.url_list << first_segment
 					const_name = "url#{self.url_list.count == 1 ? '' : "#{self.url_list.count - 1}"}".freeze
-					content_segments << "const #{const_name} = '#{first_segment}';"
+					self.const_list << "const #{const_name} = '#{first_segment}';"
 					self.export_list << const_name
 				end
 				nil
@@ -240,10 +244,12 @@ module Statik64
 					content << import_list.join(FILE_API_BETWEEN_CONTENT_SEGMENT)
 					content << "#{FILE_API_BETWEEN_CONTENT_SEGMENT}#{FILE_API_BETWEEN_CONTENT_SEGMENT}"
 				end
-				if export_list.any?
-					add_const_export_ts
+				content << self.type_list.join("#{FILE_API_BETWEEN_CONTENT_SEGMENT}#{FILE_API_BETWEEN_CONTENT_SEGMENT}")
+				content << self.const_list.join("#{FILE_API_BETWEEN_CONTENT_SEGMENT}#{FILE_API_BETWEEN_CONTENT_SEGMENT}")
+				content << self.function_list.join("#{FILE_API_BETWEEN_CONTENT_SEGMENT}#{FILE_API_BETWEEN_CONTENT_SEGMENT}")
+				if self.export_list.any?
+					content << get_const_export_ts
 				end
-				content << content_segments.join("#{FILE_API_BETWEEN_CONTENT_SEGMENT}#{FILE_API_BETWEEN_CONTENT_SEGMENT}")
 				# get_filename_ts
 				File.write('debug.ts', content)
 			end
