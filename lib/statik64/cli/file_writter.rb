@@ -7,7 +7,7 @@ module Statik64
 										 :model_class,
 										 :base_type_name,
 										 :import_list,
-										 :url_const_is_defined
+										 :url_list
 			
 			FILE_API_SEPARATOR = '-'.freeze
 			FILE_API_EXTENSION = '.api.ts'.freeze
@@ -24,7 +24,7 @@ module Statik64
 				self.model_class = model_class
 				self.base_type_name = ''
 				self.import_list = []
-				self.url_const_is_defined = false
+				self.url_list = []
 			end
 			
 			def get_filename_ts
@@ -89,19 +89,6 @@ module Statik64
 				export_list << const_name
 			end
 			
-			def add_routes_rest_const_ts(route)
-				const_name = 'url'.freeze
-				first_segment = route.path.spec.to_s.gsub('(.:format)', '').split('/').first
-				url_value = ''
-				if first_segment == model_class.model_name.route_key
-					url_value = "#{model_class.model_name.route_key}"
-				else
-					url_value = "#{model_class.model_name.singular_route_key}"
-				end
-				content_segments << "const #{const_name} = '#{url_value}';"
-				export_list << const_name
-			end
-
 			def add_function_get_default
 				function_name = 'getDefault'.freeze
 				get_value_by_column = -> (column) {
@@ -231,10 +218,14 @@ module Statik64
 			end
 
 			def ensure_const_route_is_defined(route)
-				if !self.url_const_is_defined
-					add_routes_rest_const_ts(route)
-					self.url_const_is_defined = true
+				first_segment = route[:path_segments].first
+				if self.url_list.exclude?(first_segment)
+					self.url_list << first_segment
+					const_name = "url#{self.url_list.count == 1 ? '' : "#{self.url_list.count - 1}"}".freeze
+					content_segments << "const #{const_name} = '#{first_segment}';"
+					self.export_list << const_name
 				end
+				nil
 			end
 
 			def write_file
