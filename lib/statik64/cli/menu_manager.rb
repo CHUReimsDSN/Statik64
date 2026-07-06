@@ -175,10 +175,11 @@ module Statik64
                 response = self.prompt.multi_select(
                     self.putser.get_string_bold("#{definition[:title]} \n"),
                     show_help: :never,
-                    echo: false
+                    echo: false,
+                    filter: true
                 ) do |menu|
                     definition[:options].each do |option|
-                        menu.choice(option[:label])
+                        menu.choice(option[:label], option[:value])
                     end
                 end
                 if response.any?
