@@ -6,7 +6,6 @@ module Statik64
 										 :content_segments,
 										 :model_class,
 										 :base_type_name,
-										 :base_type_columns
 			
 			FILE_API_SEPARATOR = '-'.freeze
 			FILE_API_EXTENSION = '.api.ts'.freeze
@@ -56,14 +55,13 @@ module Statik64
 						types: get_types_by_column.call(column)
 					}
 				end
-				base_type_name = "#{TYPE_PREFIX}#{model_class.model_name.name.camelcase}"
+				self.base_type_name = "#{TYPE_PREFIX}#{model_class.model_name.name.camelcase}"
 				content = []
-				content << "export type #{base_type_name} = {"
+				content << "export type #{self.base_type_name} = {"
 				columns_by_types.each do |column|
 					content << "#{add_indentation}#{column[:name]}: #{column[:types]};"
 				end
 				content << '}'
-				base_type_name = base_type_name
 				content_segments << content.join(FILE_API_BETWEEN_CONTENT_SEGMENT)
 			end
 			
@@ -73,7 +71,7 @@ module Statik64
 					raise
 				end
 				content = []
-				content << "export type #{base_type_name}#{enum_name.camelcase} = "
+				content << "export type #{self.base_type_name}#{enum_name.camelcase} = "
 				content << enum_found.keys.map {|k| "'#{k}'"}.join(' | ')
 				content << ';'
 				content_segments << content
@@ -105,7 +103,7 @@ module Statik64
 					when :boolean
 						value = 'true'
 					else
-						value = ''
+						value = "''"
 					end
 					if column.null
 						value = 'null'
@@ -122,7 +120,7 @@ module Statik64
 					}
 				end
 				content = []
-				content << "function #{function_name}(): Partial<#{base_type_name}> {"
+				content << "function #{function_name}(): Partial<#{self.base_type_name}> {"
 				values_by_columns.each do |value|
 					content << "#{add_indentation}#{value[:name]}: #{value[:value]},"
 				end
@@ -148,9 +146,9 @@ module Statik64
 			end
 
 			def add_function_rest(route)
-				function_name = route[:action_name].camelize
+				function_name = route[:action_name].camelize(:lower)
 				content = []
-				content << "async function #{function_name}(): Promise {"
+				content << "async function #{function_name}() {"
 				content << "#{add_indentation}return"
 				# TODO
 				content << '}'
@@ -160,7 +158,7 @@ module Statik64
 			
 			def add_const_export_ts
 				content = []
-				content << "export const #{}#{API_CONST_SUFFIX} = {"
+				content << "export const #{model_class.model_name.name.camelcase}#{API_CONST_SUFFIX} = {"
 				export_list.each do |export_segment|
 					content << "#{add_indentation}#{export_segment},"
 				end
@@ -176,6 +174,10 @@ module Statik64
 					end
 				end
 				content
+			end
+
+			def add_statik64_annotation
+				'@generated_by_statik64'
 			end
 
 			def write_file
