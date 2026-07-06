@@ -11,6 +11,8 @@ module Statik64
             OPTION_FUNCTION_ENUM_SEGMENT = 'function_display_for_enum'.freeze
             OPTION_FUNCTION_REST_SEGMENT = 'function_rest_'.freeze
 
+            MODEL_TO_EXCLUDE = [].freeze
+
             def initialize(model_class)
                 self.model_class = model_class
             end
@@ -56,7 +58,10 @@ module Statik64
 
             def get_routes
                 RecordManager.route_list.select do |route|
-                    route[:model_route_key] == model_class.model_name.route_key
+                    [
+                        model_class.model_name.route_key,
+                        "#{model_class.model_name.route_key}s"
+                    ].include?route[:model_route_key]
                 end
             end
 
@@ -104,7 +109,9 @@ module Statik64
             end
             
             def self.get_model_list
-                ActiveRecord::Base.descendants # TODO filter
+                ActiveRecord::Base.descendants.filter do |model|
+                    [MODEL_TO_EXCLUDE].exclude?(model.to_s)
+                end
             end
 
             def self.route_list
