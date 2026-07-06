@@ -37,10 +37,6 @@ module Statik64
                 puts get_string_bold(message)
             end
 
-            def puts(message)
-                puts(message)
-            end
-
             def puts_debug_mode
                 puts get_string_bold("[DEBUG MODE]")
             end
