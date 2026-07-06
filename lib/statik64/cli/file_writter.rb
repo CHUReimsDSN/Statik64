@@ -172,7 +172,7 @@ module Statik64
 				function_args_string = function_args.entries.map do |entry|
 					"#{entry[0]}: #{entry[1]}"
 				end.join(', ')
-				payload_arg_string = function_args["payload"].nil ? '' : ", { payload }"
+				payload_arg_string = function_args["payload"].nil? ? '' : ", { payload }"
 				config_arg_string = ''
 				content = []
 				content << "async function #{function_name}(#{function_args}) {"
