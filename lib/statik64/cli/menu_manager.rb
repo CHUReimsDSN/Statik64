@@ -16,7 +16,7 @@ module Statik64
             MENU_ABOUT_NAME = :about.freeze
 
             def initialize(runner)
-                self.debug_mode = true
+                self.debug_mode = false
                 self.actions_pool = []
                 self.putser = Statik64::CLI::Putser.new
                 self.prompt = TTY::Prompt.new(active_color: self.putser.get_detached_highlight_color)
@@ -25,7 +25,7 @@ module Statik64
                     previous_menu_name: nil,
                     context: {
                         selected_model: nil,
-                        message: nil
+                        messages: nil
                     }
                 }
                 
@@ -148,7 +148,8 @@ module Statik64
                 }
                 response = self.prompt.select(
                     self.putser.get_string_bold("#{definition[:title]} \n"),
-                    show_help: :never
+                    show_help: :never,
+                    filter: true
                 ) do |menu|
                     definition[:options].each do |option|
                         menu.choice(option[:label])
@@ -185,7 +186,7 @@ module Statik64
                 if response.any?
                     filename = record_manager.write_api_file(response)
                     add_action(-> { run_menu(MENU_DONE_NAME, {
-                        message: "Terminé ! Fichier généré #{filename}"
+                        messages: ["Terminé ! Fichier généré #{filename}"]
                     }) })
                 else
                     add_action(get_go_back_option[:action])
@@ -194,7 +195,7 @@ module Statik64
 
             def run_done_menu
                 definition = {
-                    title: self.current_menu_data[:context][:message],
+                    title: self.current_menu_data[:context][:messages].join("\n"),
                     options: [get_go_home_option]
                 }
                 response = self.prompt.select(
@@ -213,7 +214,28 @@ module Statik64
             end
 
             def run_generate_utils_menu
-            # TODO 
+                definition = {
+                    title: "Que désirez-vous ? (#{model_class.to_s})",
+                    options: Statik64::CLI::UtilManager.get_options
+                }
+                response = self.prompt.multi_select(
+                    self.putser.get_string_bold("#{definition[:title]} \n"),
+                    show_help: :never,
+                    echo: false,
+                    filter: true
+                ) do |menu|
+                    definition[:options].each do |option|
+                        menu.choice(option[:label], option[:value])
+                    end
+                end
+                if response.any?
+                    filenames = Statik64::CLI::UtilManager.write_files(response)
+                    add_action(-> { run_menu(MENU_DONE_NAME, {
+                        messages: filenames.map {|filename| "Terminé ! Fichier généré : #{filename}" }
+                    }) })
+                else
+                    add_action(get_go_back_option[:action])
+                end
             end
 
             def run_about_menu

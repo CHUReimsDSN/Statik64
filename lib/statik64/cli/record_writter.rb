@@ -1,7 +1,7 @@
 module Statik64
 	module CLI
 		
-		class FileWritter
+		class RecordWritter
 			attr_accessor :export_list,
 										 :model_class,
 										 :base_type_name,
@@ -15,7 +15,7 @@ module Statik64
 			FILE_API_EXTENSION = '.api.ts'.freeze
 			FILE_API_INDENTATION_SPACE = 2.freeze
 			FILE_API_BETWEEN_CONTENT_SEGMENT = "\n".freeze
-			FILE_API_PATH = Rails.root # TODO
+			FILE_API_PATH = Rails.root.freeze # TODO
 			TYPE_PREFIX = 'T'.freeze
 			API_CONST_SUFFIX = 'Api'.freeze
 			AXIOS_IMPORT = "import { api } from 'boot/axios';"
@@ -252,9 +252,10 @@ module Statik64
 				if self.export_list.any?
 					content << get_const_export_ts
 				end
-				content << ''
+				final_content = content.join("#{FILE_API_BETWEEN_CONTENT_SEGMENT}#{FILE_API_BETWEEN_CONTENT_SEGMENT}")
+				final_content << FILE_API_BETWEEN_CONTENT_SEGMENT
 				# get_filename_ts
-				File.write('debug.ts', content.join("#{FILE_API_BETWEEN_CONTENT_SEGMENT}#{FILE_API_BETWEEN_CONTENT_SEGMENT}"))
+				File.write('debug.ts', final_content)
 			end
 			
 		end
