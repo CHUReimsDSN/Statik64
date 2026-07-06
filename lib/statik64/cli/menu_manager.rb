@@ -170,9 +170,8 @@ module Statik64
                 end
                 if response.any?
                     add_action(record_manager.write_api_file(response))
-                else
-                    add_action(get_go_back_option)
                 end
+                add_action(get_go_back_option)
             end
 
             def run_generate_utils_menu
