@@ -117,8 +117,7 @@ module Statik64
             
             def self.get_model_list
                 ActiveRecord::Base.descendants.filter do |model|
-                    [MODEL_TO_EXCLUDE].exclude?(model.to_s)
-                    !model.abstract_class?
+                    [MODEL_TO_EXCLUDE].exclude?(model.to_s) && !model.abstract_class?
                 end
             end
 
