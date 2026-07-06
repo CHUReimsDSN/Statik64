@@ -5,7 +5,7 @@ module Statik64
 			attr_accessor :export_list,
 										 :content_segments,
 										 :model_class,
-										 :base_type_name,
+										 :base_type_name
 			
 			FILE_API_SEPARATOR = '-'.freeze
 			FILE_API_EXTENSION = '.api.ts'.freeze
@@ -19,6 +19,7 @@ module Statik64
 				self.export_list = []
 				self.content_segments = []
 				self.model_class = model_class
+				self.base_type_name = ''
 			end
 			
 			def get_filename_ts
