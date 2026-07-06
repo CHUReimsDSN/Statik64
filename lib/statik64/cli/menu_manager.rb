@@ -215,8 +215,8 @@ module Statik64
 
             def run_generate_utils_menu
                 definition = {
-                    title: "Que désirez-vous ? (#{model_class.to_s})",
-                    options: Statik64::CLI::UtilManager.get_options
+                    title: 'Que désirez-vous ?',
+                    options: Statik64::CLI::UtlManager.get_options
                 }
                 response = self.prompt.multi_select(
                     self.putser.get_string_bold("#{definition[:title]} \n"),
