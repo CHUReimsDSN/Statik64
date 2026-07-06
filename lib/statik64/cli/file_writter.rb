@@ -162,7 +162,8 @@ module Statik64
 					if segment.exclude?(':')
 						next
 					end
-					function_args[segment.camelize(:lower)] = "#{segment.include?('id') ? 'number' : 'string'}"
+					seriliazed_segment = segment.camelize(:lower).gsub(':', '')
+					function_args[seriliazed_segment] = "#{seriliazed_segment.include?('id') ? 'number' : 'string'}"
 				end
 				api_method = {
 					'GET': 'get',
