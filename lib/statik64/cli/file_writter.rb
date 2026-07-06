@@ -177,7 +177,7 @@ module Statik64
 					if segment_index == 0
 						next
 					end
-					url_segments << "#{segment.include?(':') ? "${#{segment.camelize(:lower)}}" : segment}"
+					url_segments << "#{segment.include?(':') ? "${#{segment.camelize(:lower).gsub(':', '')}}" : segment}"
 				end
 				if ['get', 'delete'].exclude?(api_method)
 					function_args["payload"] = "unknown"
