@@ -4,12 +4,12 @@ module Statik64
 
             attr_accessor :model_class
 
-            OPTION_BASE_TYPE = :base_type.freeze
-            OPTION_CONST_MODEL_NAME = :constant_model_name.freeze
-            OPTION_FUNCTION_GET_DEFAULT = :function_get_default.freeze
-            OPTION_TYPE_ENUM_SEGMENT = :type_for_enum_.freeze
-            OPTION_FUNCTION_ENUM_SEGMENT = :function_display_for_enum_.freeze
-            OPTION_FUNCTION_REST_SEGMENT = :function_rest_.freeze
+            OPTION_BASE_TYPE = 'base_type'.freeze
+            OPTION_CONST_MODEL_NAME = 'constant_model_name'.freeze
+            OPTION_FUNCTION_GET_DEFAULT = 'function_get_default'.freeze
+            OPTION_TYPE_ENUM_SEGMENT = 'type_for_enum_'.freeze
+            OPTION_FUNCTION_ENUM_SEGMENT = 'function_display_for_enum'.freeze
+            OPTION_FUNCTION_REST_SEGMENT = 'function_rest_'.freeze
 
             def initialize(model_class)
                 self.model_class = model_class
@@ -30,11 +30,11 @@ module Statik64
                     model_class.defined_enums.keys do |enum_name|
                         options << {
                             label: "Type pour enum '#{enum_name}'",
-                            value: "#{OPTION_TYPE_ENUM_SEGMENT.to_s}#{enum_name}".to_sym
+                            value: "#{OPTION_TYPE_ENUM_SEGMENT}#{enum_name}".to_sym
                         }
                         options << {
                             label: "Fonction affichage pour enum '#{enum_name}'",
-                            value: "#{OPTION_FUNCTION_ENUM_SEGMENT.to_s}#{enum_name}".to_sym
+                            value: "#{OPTION_FUNCTION_ENUM_SEGMENT}#{enum_name}".to_sym
                         }
                     end
                 end
@@ -43,7 +43,7 @@ module Statik64
                     routes.each do |route|
                         options << {
                             label: "Fonction REST #{route[:composite_key]}",
-                            value: "#{OPTION_FUNCTION_REST_SEGMENT.to_s}#{route[:composite_key]}"
+                            value: "#{OPTION_FUNCTION_REST_SEGMENT}#{route[:composite_key]}"
                         }
                     end
                 end
@@ -67,7 +67,7 @@ module Statik64
             def write_api_file(option_values)
                 writter = Statik64::CLI::FileWritter.new(self.model_class)
                 option_values.each do |value|
-                    case value.to_sym
+                    case value
                     when OPTION_BASE_TYPE
                         writter.add_base_type_ts
                         next
